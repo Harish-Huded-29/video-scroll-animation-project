@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller build files (exclude build and spec, keep app/)
+build/
+*.spec
+*.manifest
+
+# Allow the app folder and executable
+!app/
+!app/*
+!*.exe
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+
