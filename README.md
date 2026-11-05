@@ -168,7 +168,11 @@ The compiled standalone executable will be saved in `app/ScrollVideoMaker.exe`.
 ```
 video-scroll-animation-project/
 ├── app/
-│   └── ScrollVideoMaker.exe    # Standalone Windows application (No Python needed)
+│   └── ScrollVideoMaker.exe    # Standalone windowed desktop app (No Python needed)
+├── assets/
+│   ├── icon.ico                # Multi-resolution application icon (Windows binary)
+│   ├── icon.png                # High-res glowing 3D logo
+│   └── favicon.ico             # In-app browser favicon
 ├── scrollvideo.py              # Complete Python app (server + extraction engine + UI)
 ├── demo.html                   # Offline interactive demo launcher
 ├── video-and-frames/
