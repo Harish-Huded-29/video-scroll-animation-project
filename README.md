@@ -12,9 +12,16 @@ Compare the original linear video with the generated interactive scroll website:
 <div align="center">
 
 ### 🎥 Original Source Video
-<video src="https://raw.githubusercontent.com/Harish-Huded-29/video-scroll-animation-project/main/video-and-frames/video.mp4" controls width="100%" style="max-width:720px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
-  <a href="video-and-frames/video.mp4">Click to view source video (video-and-frames/video.mp4)</a>
-</video>
+
+<p align="center">
+  <a href="https://github.com/Harish-Huded-29/video-scroll-animation-project/blob/main/video-and-frames/video.mp4">
+    <img src="video-and-frames/video-preview.gif" alt="Original Video Animation Preview" width="600" style="border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.5);">
+  </a>
+</p>
+
+<a href="https://github.com/Harish-Huded-29/video-scroll-animation-project/blob/main/video-and-frames/video.mp4">
+  <img src="https://img.shields.io/badge/▶%20CLICK%20TO%20WATCH%20ORIGINAL%20VIDEO-e11d48?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch Original Video" height="42">
+</a>
 
 <br><br>
 
