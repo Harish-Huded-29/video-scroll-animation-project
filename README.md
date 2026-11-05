@@ -57,6 +57,8 @@ flowchart LR
 
 ## 🚀 How to Run It (Pick What Fits You)
 
+## Live link : https://video-scroll-29.vercel.app/
+
 ### 🌟 Option 1: Standalone Application (`.exe`) — *No Python Needed!*
 *Best for creators, designers, and anyone who wants an app that just works.*
 
