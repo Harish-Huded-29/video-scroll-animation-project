@@ -1,173 +1,165 @@
 # 🎬 Scroll Video Maker
 
-> **Turn any video into an interactive, high-performance scroll-driven web animation.**  
-> Create smooth, cinematic Apple-style product showcases and interactive landing pages in seconds without writing a single line of frontend code.
-
----
-
-## ⚡ Try the Live Demo Before Installing
-
-Compare the original linear video with the generated interactive scroll website:
-
 <div align="center">
 
-### 🎥 Original Source Video
-
-<p align="center">
-  <a href="https://github.com/Harish-Huded-29/video-scroll-animation-project/blob/main/video-and-frames/video.mp4">
-    <img src="video-and-frames/video-preview.gif" alt="Original Video Animation Preview" width="600" style="border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.5);">
-  </a>
-</p>
-
-<a href="https://github.com/Harish-Huded-29/video-scroll-animation-project/blob/main/video-and-frames/video.mp4">
-  <img src="https://img.shields.io/badge/▶%20CLICK%20TO%20WATCH%20ORIGINAL%20VIDEO-e11d48?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch Original Video" height="42">
-</a>
-
-<br><br>
-
-### 🌐 Interactive Scroll Website (Generated)
-*Scrolling down plays forward · Scrolling up plays backward · Includes Fullscreen mode & Esc key*
+[![Release](https://img.shields.io/github/v/release/Harish-Huded-29/video-scroll-animation-project?style=for-the-badge&color=22c55e&label=LATEST%20RELEASE)](https://github.com/Harish-Huded-29/video-scroll-animation-project/releases/tag/v1.0.0)
+[![Windows](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-0ea5e9?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Harish-Huded-29/video-scroll-animation-project/releases/tag/v1.0.0)
+[![Python](https://img.shields.io/badge/Python-3.8+-f59e0b?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MIT-a855f7?style=for-the-badge)](LICENSE)
 
 <br>
 
-<a href="https://htmlpreview.github.io/?https://github.com/Harish-Huded-29/video-scroll-animation-project/blob/main/video-and-frames/index.html" target="_blank">
-  <img src="https://img.shields.io/badge/▶%20CLICK%20TO%20OPEN%20LIVE%20SCROLL%20WEBSITE-6366f1?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Open Live Demo Website" height="42">
-</a>
+### **Turn any video into an interactive scroll animation — with zero coding!**
 
-<br><br>
+*Have you seen Apple's product pages where scrolling down smoothly animates a 3D product or video?*  
+**Scroll Video Maker** turns your ordinary video file into that exact interactive web experience in seconds.
 
-> 💡 **Instant Local Test:** You can also double-click [`video-and-frames/index.html`](video-and-frames/index.html) or [`demo.html`](demo.html) right in your cloned folder to test scrolling immediately in your browser — zero installation needed!
-
-</div>
-
----
-
-## ✨ Key Features
-
-- 🎞️ **Interactive Scroll Scrubber:** Scrolling down plays forward; scrolling up plays backward with fluid inertia.
-- 🎚️ **Continuous Smoothness Slider (1–100):** Continuous fine-tuning between lightweight/fast-loading (`Light`) and butter-smooth motion (`Ultra`).
-- 📏 **Customizable Scroll Length:** Drag the slider up to 100 screens, or type any number of screens you want (e.g. `20`, `75`, `250`).
-- 🖥️ **Fullscreen Mode:** One-click full-screen toggle with native **`Esc`** key support.
-- 🖼️ **Modern Image Formats:** Export in **WebP** (recommended, small & fast), **AVIF** (ultra-compact), **JPG** (universal compatibility), or **PNG** (lossless pixel perfection).
-- 📐 **Multiple Resolutions:** Supports **HD 720p**, **Full HD 1080p**, **2K 1440p**, and **4K 2160p**.
-- 📦 **Dual-Mode Frame Downloader:**
-  - **Native Folder Picker:** In modern Chrome/Edge, saves all frames directly into a `frames/` subfolder on your computer with real-time percentage progress.
-  - **1-Click ZIP Download:** Instant `.zip` archive download fallback for any device.
-- 🧹 **Zero-Leak Memory & Storage Guarantee:** All temporary files and memory buffers are purged when exiting or resetting.
-- ✏️ **Live In-App Editor:** Return to the settings screen anytime to re-tune length, smoothness, or resolution without re-uploading.
-
----
-
-## 🚀 How to Use
-
-Choose whichever option works best for you:
-
-### 🌟 Option 1: Standalone Application (`ScrollVideoMaker.exe`) — *No Python Needed!*
-
-*(Pre-packaged with Python, OpenCV, and all dependencies. Runs standalone on any Windows PC!)*
-
-<div align="center">
+<br>
 
 <a href="https://github.com/Harish-Huded-29/video-scroll-animation-project/releases/download/v1.0.0/ScrollVideoMaker.exe">
-  <img src="https://img.shields.io/badge/⬇%20DOWNLOAD%20ScrollVideoMaker.exe-v1.0.0%20(Windows)-22c55e?style=for-the-badge&logo=windows&logoColor=white" alt="Download Standalone EXE" height="50">
+  <img src="https://img.shields.io/badge/⬇%20DOWNLOAD%20FOR%20WINDOWS-ScrollVideoMaker.exe-22c55e?style=for-the-badge&logo=windows&logoColor=white" alt="Download Standalone EXE" height="54">
 </a>
 
-<br><br>
-<small>Direct repository mirror: <a href="app/ScrollVideoMaker.exe"><b><code>app/ScrollVideoMaker.exe</code></b></a></small>
+<br>
+<sub>✨ Standalone application • No Python or installation needed • Ready to run</sub>
 
 </div>
 
-#### Quick Steps:
-1. Click the green button above to download **`ScrollVideoMaker.exe`**.
-2. Double-click **`ScrollVideoMaker.exe`** to launch.
-3. Your browser will automatically open at `http://localhost:8000`.
-4. Drag and drop any video file (`.mp4`, `.mov`, `.webm`, `.avi`, `.mkv`), adjust your settings, and click **Make scroll website**!
+---
+
+## 👀 See It In Action (Before & After)
+
+See the difference between a standard video and the interactive scroll website generated by this tool:
+
+| 🎥 Standard Video (Before) | 🌐 Interactive Scroll Website (After) |
+| :---: | :---: |
+| **Plays automatically at one fixed speed** | **You control the animation by scrolling!** |
+| [![Original Video Preview](video-and-frames/video-preview.gif)](https://github.com/Harish-Huded-29/video-scroll-animation-project/blob/main/video-and-frames/video.mp4) | <br><br> 👇 **Scroll down** = Plays video forward<br> 👆 **Scroll up** = Plays video backward<br><br> ✨ Smooth physics inertia<br> 🖥️ Fullscreen toggle (**Esc** key)<br><br> |
+| <a href="https://github.com/Harish-Huded-29/video-scroll-animation-project/blob/main/video-and-frames/video.mp4"><img src="https://img.shields.io/badge/▶%20WATCH%20ORIGINAL%20VIDEO-e11d48?style=for-the-badge&logo=youtube&logoColor=white" height="38"></a> | <a href="https://htmlpreview.github.io/?https://github.com/Harish-Huded-29/video-scroll-animation-project/blob/main/video-and-frames/index.html" target="_blank"><img src="https://img.shields.io/badge/▶%20TEST%20LIVE%20SCROLL%20WEBSITE-6366f1?style=for-the-badge&logo=googlechrome&logoColor=white" height="38"></a> |
+
+> 💡 **Quick Local Test:** If you clone this repository, you can double-click [`video-and-frames/index.html`](video-and-frames/index.html) or [`demo.html`](demo.html) to play with the interactive scroll website directly in your browser offline!
+
+---
+
+## 💡 How It Works (In 3 Simple Steps)
+
+```mermaid
+flowchart LR
+    A["1. Drop Any Video<br>(MP4, MOV, WebM)"] --> B["2. Choose Scroll Feel<br>(Length & Smoothness)"]
+    B --> C["3. Click 'Make Website'<br>(Preview & Download)"]
+```
+
+1. **Drop your video:** Drag and drop your video into the app.
+2. **Choose your scroll feel:** Pick how long people should scroll and how smooth you want the motion to feel.
+3. **Preview & Export:** Scroll your website live in your browser, then download all frames and ready-to-use HTML code with 1 click!
+
+---
+
+## 🚀 How to Run It (Pick What Fits You)
+
+### 🌟 Option 1: Standalone Application (`.exe`) — *No Python Needed!*
+*Best for creators, designers, and anyone who wants an app that just works.*
+
+1. **[Download ScrollVideoMaker.exe](https://github.com/Harish-Huded-29/video-scroll-animation-project/releases/download/v1.0.0/ScrollVideoMaker.exe)** (from our official [v1.0.0 Release](https://github.com/Harish-Huded-29/video-scroll-animation-project/releases/tag/v1.0.0)).
+2. Double-click **`ScrollVideoMaker.exe`** to open it.
+3. Your web browser will automatically open with the app ready to use. That's it!
 
 > [!TIP]
-> ### 🛡️ Windows SmartScreen / Security Manager Prompt:
-> Because this is a newly released open-source project without a commercial corporate certificate, Windows may show a standard blue prompt saying *"Windows protected your PC"*.
-> 
-> **To run the application:**
-> 1. Click **"More info"** on the prompt.
-> 2. Click **"Run anyway"**.
-> 
-> *(Or right-click `ScrollVideoMaker.exe` → **Properties** → check **Unblock** at the bottom → click **OK**).*
+> **Windows Security / SmartScreen Note:**  
+> Because this is a free open-source project that doesn't use an expensive corporate certificate, Windows might show a blue prompt saying *"Windows protected your PC"*.  
+> 👉 Click **"More info"** → Click **"Run anyway"**.  
+> *(You can also right-click `ScrollVideoMaker.exe` → **Properties** → check **Unblock** at the bottom → click **OK**).*
 
 ---
 
-### 🐍 Option 2: Run Directly with Python (Using Terminal)
+### 🐍 Option 2: Run with Python (For Developers)
+*If you already have Python installed and want to run it from your terminal.*
 
-#### Step 1: Requirements
-Make sure you have **Python 3.8+** installed ([Download Python](https://www.python.org/downloads/)).
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Harish-Huded-29/video-scroll-animation-project.git
+   cd video-scroll-animation-project
+   ```
 
-#### Step 2: Download or Clone
-```bash
-git clone https://github.com/Harish-Huded-29/video-scroll-animation-project.git
-cd video-scroll-animation-project
-```
-*(Or download the single file [`scrollvideo.py`](https://raw.githubusercontent.com/Harish-Huded-29/video-scroll-animation-project/main/scrollvideo.py))*
+2. **Install the two required libraries:**
+   ```bash
+   pip install opencv-python Pillow
+   ```
 
-#### Step 3: Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-*(Or install directly: `pip install opencv-python Pillow`)*
-
-#### Step 4: Launch Web App
-```bash
-python scrollvideo.py
-```
-Open your browser at `http://localhost:8000`.
+3. **Start the application:**
+   ```bash
+   python scrollvideo.py
+   ```
+   The interactive interface will automatically open in your browser at `http://localhost:8000`.
 
 ---
 
-### 💻 Option 3: Command-Line (CLI) Direct Mode
+## 🎛️ Settings Explained in Plain English
 
-You can also bypass the upload screen and build a scroll animation directly from your terminal:
+| Setting | What it means | Recommended Setting |
+| :--- | :--- | :--- |
+| **Scroll Length** | How much the visitor scrolls to complete the video.<br>• Low number (5–10): Fast scroll, video finishes quickly.<br>• High number (20–100+): Slower, more cinematic scroll story. | **20 screens** |
+| **Smoothness** | How smooth the motion feels as someone spins their mouse wheel.<br>• **Light (Left):** Fewer frames, fastest page loading.<br>• **Ultra (Right):** Maximum frames, silky butter-smooth motion. | **Smooth (Center / 50%)** |
+| **Resolution** | The size and crispness of each frame.<br>• **HD (720p):** Ultra-lightweight, great for mobile.<br>• **Full HD (1080p):** Crisp and clear on laptops and monitors.<br>• **2K / 4K:** Maximum detail for high-end displays. | **Full HD (1080p)** |
+| **Image Format** | The file type for the extracted frames.<br>• **WebP:** Modern format, tiny file sizes, sharp quality.<br>• **JPG:** Universal compatibility with older devices.<br>• **PNG:** Lossless pixel perfection (largest file size).<br>• **AVIF:** Next-generation super compression. | **WebP** |
+| **Video Fit** | How the video fits the visitor's screen.<br>• **Cover:** Fills 100% of the screen edge-to-edge (no black bars).<br>• **Contain:** Shows the complete uncropped video (adds letterbox bars if screen shape differs). | **Cover** |
+
+---
+
+## 🎁 What You Get When You Export
+
+When you generate your scroll animation, you get:
+1. **Interactive Preview:** Test scrolling live right in your browser with full-screen mode support (`Esc` key to exit).
+2. **Download Frames Button:**
+   - In modern browsers (Chrome/Edge), choose any folder on your computer and the app saves all extracted frames directly into a `frames/` subfolder.
+   - Also supports **1-Click ZIP Download** to download all frames in a clean compressed archive.
+3. **Ready-to-Host Code:** You can upload your generated `index.html` and `frames/` folder directly to GitHub Pages, Netlify, Vercel, or WordPress.
+4. **Zero Memory Leak:** When you close the app or switch videos, all temporary RAM and disk caches are instantly cleaned up.
+
+---
+
+<details>
+<summary><b>💻 Advanced: Terminal CLI Mode (For Power Users)</b></summary>
+
+<br>
+
+You can bypass the web interface and build a scroll animation directly from your terminal:
 
 ```bash
 # Basic usage
 python scrollvideo.py my_video.mp4
 
-# Advanced customization
+# Custom settings
 python scrollvideo.py my_video.mp4 --screens 25 --smoothness 75 --width 1920 --format webp --fit cover
 ```
 
-#### Available Terminal Flags
+#### Available Flags:
+- `--screens <number>`: Number of page heights to scroll (e.g. `20`)
+- `--smoothness <1-100>`: Smoothness level from Light (`1`) to Ultra (`100`)
+- `--width <px>`: Resolution width (`1280`, `1920`, `2560`, `3840`)
+- `--format <format>`: Frame format (`webp`, `jpg`, `png`, `avif`)
+- `--quality <40-100>`: Image compression quality (default `82`)
+- `--fit <cover|contain>`: Sizing mode
+- `--port <number>`: Local server port (default `8000`)
+- `--no-browser`: Run headless without popping up your web browser
 
-| Flag | Default | Description |
-|---|:---:|---|
-| `video` | *None* | Path to your video file (`.mp4`, `.mov`, `.webm`, `.mkv`, etc.) |
-| `--screens` | `20` | Scroll length in page heights (2 to 1000) |
-| `--smoothness` | `50` | Smoothness level from `1` (Light) to `100` (Ultra) or preset `1`..`5` |
-| `--width` | `1920` | Resolution width: `1280` (720p), `1920` (1080p), `2560` (2K), or `3840` (4K) |
-| `--format` | `webp` | Frame format: `webp`, `jpg`, `png`, or `avif` |
-| `--quality` | `82` | Image compression quality (`40` to `100`) |
-| `--fit` | `cover` | Sizing behavior: `cover` (fills screen) or `contain` (no cropping) |
-| `--frames` | `0` (Auto) | Override and set an exact frame count |
-| `--port` | `8000` | Local web server port |
-| `--no-browser` | `False` | Start the server without opening the default browser |
+</details>
 
----
+<details>
+<summary><b>🛠️ How to Compile the .exe Yourself from Source</b></summary>
 
-## 🛠️ How to Build the `.exe` File
+<br>
 
-If you want to compile the `.exe` binary yourself from source:
+If you want to package the `.exe` yourself using PyInstaller:
 
-1. Install PyInstaller:
-   ```bash
-   pip install pyinstaller
-   ```
+```bash
+pip install pyinstaller
+python -m PyInstaller --noconfirm --clean --onefile --version-file version_info.txt --distpath app --workpath build --name "ScrollVideoMaker" --collect-all cv2 --collect-all PIL scrollvideo.py
+```
 
-2. Build the signed binary:
-   ```bash
-   python -m PyInstaller --noconfirm --clean --onefile --version-file version_info.txt --distpath app --workpath build --name "ScrollVideoMaker" --collect-all cv2 --collect-all PIL scrollvideo.py
-   ```
+The compiled standalone executable will be saved in `app/ScrollVideoMaker.exe`.
 
-3. The compiled binary will be located in:
-   ```
-   app/ScrollVideoMaker.exe
-   ```
+</details>
 
 ---
 
@@ -176,23 +168,23 @@ If you want to compile the `.exe` binary yourself from source:
 ```
 video-scroll-animation-project/
 ├── app/
-│   └── ScrollVideoMaker.exe   # Prebuilt standalone Windows binary (no Python needed)
-├── scrollvideo.py             # Complete Python application (web server + frame engine + UI)
-├── demo.html                  # Quick interactive demo launcher
+│   └── ScrollVideoMaker.exe    # Standalone Windows application (No Python needed)
+├── scrollvideo.py              # Complete Python app (server + extraction engine + UI)
+├── demo.html                   # Offline interactive demo launcher
 ├── video-and-frames/
-│   ├── video.mp4              # Sample input video
-│   ├── index.html             # Standalone scroll demo website with Fullscreen & Esc
-│   └── frames/                # 265 extracted WebP animation frames
-├── version_info.txt           # Windows application metadata & manifest
-├── requirements.txt           # Python dependencies (opencv-python, Pillow)
-├── .gitignore                 # Git exclusion rules
-└── README.md                  # Documentation & user guide
+│   ├── video.mp4               # Sample source video
+│   ├── video-preview.gif       # Animated demonstration preview
+│   ├── index.html              # Standalone interactive scroll website
+│   └── frames/                 # 265 extracted WebP animation frames
+├── version_info.txt            # Windows binary metadata & manifest
+├── requirements.txt            # Python dependencies (opencv-python, Pillow)
+└── README.md                   # Documentation & creator guide
 ```
 
 ---
 
-## 👤 Author
+## 👤 Author & Support
 
-Developed by **[Harish Huded](https://github.com/Harish-Huded-29)**
+Created with ❤️ by **[Harish Huded](https://github.com/Harish-Huded-29)**
 
-Feel free to star ⭐ the repository if you find this tool helpful!
+If you found this tool useful for your projects or client websites, please consider giving it a **Star ⭐ on GitHub** — it helps a lot!
