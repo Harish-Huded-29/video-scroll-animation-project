@@ -358,20 +358,31 @@ NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 
 
 def _run(cmd):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=1800, creationflags=NO_WINDOW)
+    return subprocess.run(cmd, capture_output=True, text=True, timeout=60, creationflags=NO_WINDOW)
 
 
 def pick_folder():
     """Open the computer's own folder-chooser. Returns ("ok", path) | ("cancel", None) | ("unavailable", None)."""
     with PICK_LOCK:
-        attempts = [[sys.executable, "-c", TK_SCRIPT]]
+        attempts = []
+        is_frozen = getattr(sys, "frozen", False)
         if sys.platform.startswith("win"):
-            attempts.append(["powershell", "-NoProfile", "-STA", "-Command",
-                             "Add-Type -AssemblyName System.Windows.Forms;"
-                             "$f=New-Object System.Windows.Forms.FolderBrowserDialog;"
-                             "$f.Description='Choose where to save the frames';"
-                             "$f.ShowNewFolderButton=$true;"
-                             "if($f.ShowDialog() -eq 'OK'){$f.SelectedPath}"])
+            # PowerShell folder dialog with TopMost window so it always pops up in the foreground
+            ps_script = (
+                "$ErrorActionPreference = 'Stop'; "
+                "Add-Type -AssemblyName System.Windows.Forms; "
+                "$f = New-Object System.Windows.Forms.FolderBrowserDialog; "
+                "$f.Description = 'Choose where to save the frames'; "
+                "$f.ShowNewFolderButton = $true; "
+                "$top = New-Object System.Windows.Forms.Form; "
+                "$top.TopMost = $true; "
+                "if ($f.ShowDialog($top) -eq [System.Windows.Forms.DialogResult]::OK) { "
+                "  [Console]::Out.WriteLine($f.SelectedPath) "
+                "} else { [Console]::Out.WriteLine('') }"
+            )
+            attempts.append(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-STA", "-Command", ps_script])
+            if not is_frozen:
+                attempts.append([sys.executable, "-c", TK_SCRIPT])
         elif sys.platform == "darwin":
             attempts.append(["osascript", "-e",
                              'POSIX path of (choose folder with prompt "Choose where to save the frames")'])
@@ -1680,6 +1691,15 @@ VIEWER_HTML = r"""<!DOCTYPE html>
 <div id="progress"></div>
 
 <div class="top-nav">
+  <button class="glass" id="fsBtn" title="Toggle Fullscreen mode (Esc to exit)">
+    <svg id="fsIcoEnter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+    </svg>
+    <svg id="fsIcoExit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" hidden>
+      <path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M14 4v6m0 0h6m-6 0L21 3M10 4v6m0 0H4m6 0L3 3"/>
+    </svg>
+    <span id="fsText">Fullscreen</span>
+  </button>
   <button class="glass" id="edit" title="Edit scroll settings or change configuration">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -1836,17 +1856,127 @@ function closeModal() { if (modalLocked) return; $("modal").classList.remove("on
 $("modal").addEventListener("mousedown", e => { if (e.target === $("modal")) closeModal(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
 
-/* ---------- Download frames ---------- */
+/* ---------- Fullscreen (Esc to exit) ---------- */
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => console.warn(err));
+  } else {
+    document.exitFullscreen().catch(err => console.warn(err));
+  }
+}
+function updateFullscreenUi() {
+  const isFs = !!document.fullscreenElement;
+  if ($("fsIcoEnter")) $("fsIcoEnter").hidden = isFs;
+  if ($("fsIcoExit")) $("fsIcoExit").hidden = !isFs;
+  if ($("fsText")) $("fsText").textContent = isFs ? "Exit Fullscreen" : "Fullscreen";
+}
+$("fsBtn").onclick = toggleFullscreen;
+document.addEventListener("fullscreenchange", updateFullscreenUi);
+
+/* ---------- Download frames: Modern Native Picker + Server & ZIP Fallback ---------- */
 let saving = false;
+
+async function downloadFramesNativeBrowser() {
+  if (window.showDirectoryPicker) {
+    try {
+      const handle = await window.showDirectoryPicker({ mode: "readwrite" });
+      if (!handle) return false;
+      saving = true;
+      showModal({ kind: "busy", title: "Saving frames to folder…", text: `Writing ${N} frames to "${handle.name}/frames"…`, progress: true, lock: true });
+      const framesDir = await handle.getDirectoryHandle("frames", { create: true });
+      for (let i = 0; i < N; i++) {
+        const res = await fetch(url(i));
+        const blob = await res.blob();
+        const fname = `${CFG.prefix}${String(i + 1).padStart(CFG.pad, "0")}.${CFG.ext}`;
+        const fileHandle = await framesDir.getFileHandle(fname, { create: true });
+        const writer = await fileHandle.createWritable();
+        await writer.write(blob);
+        await writer.close();
+        const pct = Math.round(((i + 1) / N) * 100);
+        if ($("mfill")) $("mfill").style.width = pct + "%";
+        const pTag = $("card").querySelector("p");
+        if (pTag) pTag.textContent = `Saved ${i + 1} of ${N} frames (${pct}%)…`;
+      }
+      saving = false;
+      modalLocked = false;
+      showModal({
+        kind: "ok",
+        title: "All frames saved!",
+        text: `${N} frames were successfully saved into "${handle.name}/frames" on your computer.`,
+        buttons: [
+          { label: "Close", primary: true, onClick: closeModal },
+          { label: "Download as ZIP too", onClick: () => { location.href = "/download.zip"; } }
+        ]
+      });
+      return true;
+    } catch (err) {
+      saving = false;
+      modalLocked = false;
+      if (err.name === "AbortError") {
+        toast("Folder selection cancelled.");
+        return true;
+      }
+      console.warn("Native browser folder picker error:", err);
+      return false;
+    }
+  }
+  return false;
+}
+
 $("dl").onclick = async () => {
   if (saving) return;
-  saving = true;
-  try {
-    const r = await fetch("/download-frames", { method: "POST", headers: H });
-    if (!r.ok) throw new Error((await r.json()).error || "Could not start.");
-    pollSave();
-  } catch (e) { saving = false; showModal({ kind: "bad", title: "Could not save", text: e.message, buttons: [{ label: "Close", onClick: closeModal }] }); }
+  // 1. Try modern browser Directory Picker first (Chromium / Windows Explorer)
+  const handled = await downloadFramesNativeBrowser();
+  if (handled) return;
+
+  // 2. Choice modal: Server-side Folder Window or Direct ZIP
+  showModal({
+    kind: "busy",
+    title: "Download Frames",
+    text: `Save all ${N} frames (${CFG.mb || 0} MB) to your computer:`,
+    buttons: [
+      {
+        label: "📁 Select Folder on Computer",
+        primary: true,
+        onClick: () => {
+          closeModal();
+          startServerSave();
+        }
+      },
+      {
+        label: "📦 Download as ZIP file",
+        onClick: () => {
+          location.href = "/download.zip";
+          closeModal();
+          toast("Downloading ZIP archive…");
+        }
+      },
+      { label: "Cancel", onClick: closeModal }
+    ]
+  });
 };
+
+function startServerSave() {
+  if (saving) return;
+  saving = true;
+  fetch("/download-frames", { method: "POST", headers: H })
+    .then(r => {
+      if (!r.ok) throw new Error("Could not start folder picker.");
+      pollSave();
+    })
+    .catch(e => {
+      saving = false;
+      showModal({
+        kind: "bad",
+        title: "Folder picker issue",
+        text: "Could not open folder picker window. You can download all the frames as a ZIP file directly instead.",
+        buttons: [
+          { label: "Download ZIP", primary: true, onClick: () => { location.href = "/download.zip"; closeModal(); } },
+          { label: "Close", onClick: closeModal }
+        ]
+      });
+    });
+}
 
 function pollSave() {
   fetch("/save-status").then(r => r.json()).then(s => {
@@ -1870,7 +2000,7 @@ function pollSave() {
       showModal({ kind: "bad", title: "Can't open a folder window", text: "This computer has no folder picker available. You can download all the frames as a ZIP file instead.",
         buttons: [{ label: "Download ZIP", primary: true, onClick: () => { location.href = "/download.zip"; closeModal(); } }, { label: "Close", onClick: closeModal }] });
     } else {
-      showModal({ kind: "bad", title: "Could not save the frames", text: s.message || "Something went wrong.", buttons: [{ label: "Close", onClick: closeModal }] });
+      showModal({ kind: "bad", title: "Could not save the frames", text: s.message || "Something went wrong.", buttons: [{ label: "Download as ZIP instead", primary: true, onClick: () => { location.href = "/download.zip"; closeModal(); } }, { label: "Close", onClick: closeModal }] });
     }
   }).catch(() => setTimeout(pollSave, 700));
 }
