@@ -26,6 +26,7 @@ COMMAND LINE (all optional)
 
 import argparse
 import atexit
+import base64
 import gc
 import http.server
 import json
@@ -43,6 +44,74 @@ import webbrowser
 import zipfile
 from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlparse
+
+# Ensure stdout/stderr exist when running as a windowed application without a console
+if sys.stdout is None:
+    class _NullWriter:
+        def write(self, *a, **k): pass
+        def flush(self): pass
+    sys.stdout = _NullWriter()
+if sys.stderr is None:
+    sys.stderr = _NullWriter()
+
+# Embedded fallback 32x32 favicon ICO bytes
+EMBEDDED_FAVICON = base64.b64decode(
+    "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"
+)
 
 try:
     import cv2
@@ -508,6 +577,8 @@ UPLOAD_HTML = r"""<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Scroll Video Maker</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" href="/assets/icon.png" />
 <style>
   :root { --bg:#0b0b0d; --fg:#f4f4f5; --card:#15151a; --line:#2a2a32; --mut:#9a9aa5; --acc:#fff; --green:#4ade80; }
   * { box-sizing:border-box; margin:0; padding:0; }
@@ -1609,7 +1680,9 @@ VIEWER_HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Scroll Video</title>
+<title>Scroll Video Maker</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" href="/assets/icon.png" />
 <style>
   :root { --bg:#0b0b0d; --fg:#f4f4f5; }
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -2119,7 +2192,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return self._send("Forbidden", "text/plain", 403)
         u = urlparse(self.path)
         try:
-            if u.path == "/":
+            if u.path in ("/favicon.ico", "/favicon.png", "/assets/icon.ico", "/assets/icon.png"):
+                ext = ".ico" if "ico" in u.path else ".png"
+                ctype = "image/x-icon" if "ico" in u.path else "image/png"
+                local_asset = Path(__file__).resolve().parent / "assets" / f"icon{ext}"
+                if local_asset.is_file():
+                    return self._send(local_asset.read_bytes(), ctype)
+                return self._send(EMBEDDED_FAVICON, "image/x-icon")
+            elif u.path == "/":
                 self._send(upload_page(), "text/html; charset=utf-8")
             elif u.path == "/status":
                 with LOCK:
@@ -2298,6 +2378,60 @@ def main():
         PROBE.update(probe)
         start_path = "/view/"
 
+def launch_app_window(url):
+    """
+    Launch a standalone application window (Chromeless App Mode using Microsoft Edge or Chrome)
+    so the app runs with its own dedicated window, logo, and zero browser tabs or URL bars.
+    Falls back to default web browser if neither is present.
+    """
+    candidates = [
+        os.path.expandvars(r"%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe"),
+        os.path.expandvars(r"%ProgramFiles%\Microsoft\Edge\Application\msedge.exe"),
+        os.path.expandvars(r"%LocalAppData%\Microsoft\Edge\Application\msedge.exe"),
+        os.path.expandvars(r"%ProgramFiles%\Google\Chrome\Application\chrome.exe"),
+        os.path.expandvars(r"%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe"),
+        os.path.expandvars(r"%LocalAppData%\Google\Chrome\Application\chrome.exe"),
+        os.path.expandvars(r"%LocalAppData%\BraveSoftware\Brave-Browser\Application\brave.exe"),
+    ]
+    for exe in candidates:
+        if os.path.isfile(exe):
+            try:
+                return subprocess.Popen([
+                    exe,
+                    f"--app={url}",
+                    "--window-size=1280,850",
+                    "--window-position=center"
+                ])
+            except Exception:
+                pass
+    webbrowser.open(url)
+    return None
+
+
+def main():
+    a = parse_args()
+    start_path = "/"
+    if a.video:
+        p = Path(a.video)
+        if not p.is_file():
+            sys.exit(f"File not found: {a.video}")
+        try:
+            probe = probe_video(p)
+        except RuntimeError as e:
+            sys.exit(str(e))
+        o = clean_opts({"screens": a.screens, "smoothness": a.smoothness, "width": a.width,
+                        "format": a.format, "compression": a.quality, "frames": a.frames, "fit": a.fit})
+        pl = make_plan(probe, o)
+        print(f"Video: {probe['width']}x{probe['height']}, {probe['duration']}s, {probe['frames']} frames")
+        print(f"Plan : {pl['count']} frames at {pl['width']}x{pl['height']}")
+        for n in pl["notes"]:
+            print("Note :", n)
+        build_preview(p, probe, o)
+        if JOB["state"] == "error":
+            sys.exit(JOB["message"])
+        PROBE.update(probe)
+        start_path = "/view/"
+
     for port in range(a.port, a.port + 20):
         try:
             httpd = Server(("127.0.0.1", port), Handler)
@@ -2309,8 +2443,24 @@ def main():
 
     print(f"\nScroll Video Maker is running at  http://localhost:{port}/")
     print("Press Ctrl+C to stop.\n")
+
+    app_proc = None
     if not a.no_browser:
-        threading.Timer(0.6, lambda: webbrowser.open(f"http://localhost:{port}{start_path}")).start()
+        def _starter():
+            nonlocal app_proc
+            target_url = f"http://127.0.0.1:{port}{start_path}"
+            app_proc = launch_app_window(target_url)
+            if app_proc:
+                def _watcher():
+                    try:
+                        app_proc.wait()
+                        httpd.shutdown()
+                    except Exception:
+                        pass
+                threading.Thread(target=_watcher, daemon=True).start()
+
+        threading.Timer(0.4, _starter).start()
+
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
