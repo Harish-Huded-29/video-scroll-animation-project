@@ -26,11 +26,13 @@ COMMAND LINE (all optional)
 
 import argparse
 import atexit
+import gc
 import http.server
 import json
 import os
 import re
 import shutil
+import signal
 import socketserver
 import subprocess
 import sys
@@ -96,12 +98,52 @@ def set_save(**kw):
 
 
 def cleanup_all():
-    shutil.rmtree(UPLOAD_DIR, ignore_errors=True)
-    if PREVIEW["dir"]:
-        shutil.rmtree(PREVIEW["dir"], ignore_errors=True)
+    """Wipe all temporary frames, upload folders, and free all RAM/disk storage."""
+    with LOCK:
+        shutil.rmtree(UPLOAD_DIR, ignore_errors=True)
+        if PREVIEW.get("dir"):
+            shutil.rmtree(PREVIEW["dir"], ignore_errors=True)
+            PREVIEW["dir"] = None
+            PREVIEW["cfg"] = None
+        # Clean up any lingering scrollvideo_frames_* in tempdir
+        temp_dir = Path(tempfile.gettempdir())
+        for d in temp_dir.glob("scrollvideo_frames_*"):
+            try:
+                shutil.rmtree(d, ignore_errors=True)
+            except Exception:
+                pass
+        PROBE.clear()
+        UPLOADED["path"] = None
+        JOB.update(state="idle", pct=0, message="", result=None)
+        SAVE.update(state="idle", pct=0, message="", folder=None, count=0, mb=0)
+        gc.collect()
 
+
+def _sig_handler(signum, frame):
+    cleanup_all()
+    sys.exit(0)
+
+
+try:
+    signal.signal(signal.SIGINT, _sig_handler)
+    signal.signal(signal.SIGTERM, _sig_handler)
+except Exception:
+    pass
 
 atexit.register(cleanup_all)
+
+# Windows Console Close event handler (guarantees cleanup when CMD/PowerShell window is closed)
+if sys.platform.startswith("win"):
+    try:
+        import ctypes
+        HandlerRoutine = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.c_ulong)
+        def _console_ctrl_handler(ctrl_type):
+            cleanup_all()
+            return False
+        _global_ctrl_handler = HandlerRoutine(_console_ctrl_handler)
+        ctypes.windll.kernel32.SetConsoleCtrlHandler(_global_ctrl_handler, True)
+    except Exception:
+        pass
 
 
 # --------------------------------------------------------------------------
@@ -1319,6 +1361,7 @@ $("file").onchange = e => pick(e.target.files[0]);
 $("drop").addEventListener("drop", e => pick(e.dataTransfer.files[0]));
 $("change").onclick = () => {
   sessionStorage.setItem("sv_cleared", "1");
+  fetch("/reset", { method: "POST", headers: H }).catch(() => {});
   $("file").value = "";
   $("err1").hidden = true;
   $("upstat").hidden = true;
@@ -2005,7 +2048,14 @@ function pollSave() {
   }).catch(() => setTimeout(pollSave, 700));
 }
 
-$("new").onclick = () => { location.href = "/"; };
+$("new").onclick = async () => {
+  frames.length = 0;
+  try { await fetch("/reset", { method: "POST", headers: H }); } catch (_) {}
+  location.href = "/";
+};
+window.addEventListener("pagehide", () => {
+  frames.length = 0;
+});
 $("edit").onclick = () => { location.href = "/?edit=1"; };
 
 loadAll();
@@ -2130,6 +2180,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return self._build()
         if u.path == "/download-frames":
             return self._download_frames()
+        if u.path == "/reset":
+            cleanup_all()
+            return self._json({"ok": True})
         if u.path == "/open-folder":
             return self._json({"ok": bool(LAST_SAVED["folder"]) and open_folder(LAST_SAVED["folder"])})
         self._send("Not found", "text/plain", 404)
@@ -2221,6 +2274,8 @@ def main():
     ap.add_argument("--no-browser", action="store_true")
     a = ap.parse_args()
 
+    cleanup_all()  # Clean up any leftover temp files on startup
+
     start_path = "/"
     if a.video:
         p = Path(a.video)
@@ -2259,7 +2314,10 @@ def main():
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
-        print("\nStopped.")
+        pass
+    finally:
+        cleanup_all()
+        print("\nCleaned up all temporary files and stopped.")
 
 
 if __name__ == "__main__":
