@@ -27,6 +27,7 @@ wheels/
 # PyInstaller temporary and release files
 *.exe.manifest
 *.manifest
+!*.exe
 
 # Environments
 .env
